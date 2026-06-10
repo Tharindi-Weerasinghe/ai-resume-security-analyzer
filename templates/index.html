@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Resume Security Analyzer</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b1220;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #111a2e;
+            padding: 40px;
+            border-radius: 15px;
+            width: 420px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.6);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        p {
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 25px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background: #1c2742;
+            border: 1px solid #2c3a5e;
+            border-radius: 8px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #4f7cff;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #3a66ff;
+        }
+
+        .footer {
+            margin-top: 15px;
+            font-size: 11px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🛡 AI Resume Security Analyzer</h1>
+
+    <p>Upload your resume to detect privacy leaks, phishing risks & sensitive data exposure</p>
+
+    <form action="/analyze" method="POST" enctype="multipart/form-data">
+
+        <input type="file" name="resume" required>
+
+        <button type="submit">Analyze Security</button>
+
+    </form>
+
+    <div class="footer">
+        Cybersecurity AI Project • Flask • NLP • Security Analysis
+    </div>
+
+</div>
+
+</body>
+</html>

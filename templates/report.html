@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Security Report</title>
+
+    <style>
+    body {
+        font-family: Arial;
+        background: #0b1220;
+        margin: 0;
+        padding: 20px;
+        color: white;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: auto;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .card {
+        background: #111a2e;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    }
+
+    .badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-weight: bold;
+        color: white;
+        font-size: 12px;
+    }
+
+    .LOW { background: #2ecc71; }
+    .MEDIUM { background: #f39c12; }
+    .HIGH { background: #e74c3c; }
+    .CRITICAL { background: #8e44ad; }
+
+    .item {
+        padding: 8px 0;
+        border-bottom: 1px solid #222;
+    }
+
+    a {
+        color: #4f7cff;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .score {
+        font-size: 22px;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🛡 Resume Security Analysis Report</h1>
+
+    <!-- RISK -->
+    <div class="card">
+        <div class="section-title">Risk Overview</div>
+
+        <div class="score-box">
+            Score: <b>{{ risk.score }}</b>
+        </div>
+
+        <p>
+            Level:
+            <span class="badge {{ risk.level }}">
+                {{ risk.level }}
+            </span>
+        </p>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="card">
+        <div class="section-title">AI Security Summary</div>
+        <p>{{ summary }}</p>
+    </div>
+
+    <!-- PII -->
+    <div class="card">
+        <div class="section-title">Sensitive Data Detected</div>
+
+        {% for item in pii %}
+            <div class="item">
+                <b>{{ item.type }}</b>
+                → {{ item.matches }}
+                <span class="badge {{ item.risk }}">{{ item.risk }}</span>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- ENTITIES -->
+    <div class="card">
+        <div class="section-title">AI Entity Detection</div>
+
+        <p><b>People:</b> {{ entities.PERSON }}</p>
+        <p><b>Organizations:</b> {{ entities.ORG }}</p>
+        <p><b>Locations:</b> {{ entities.GPE }}</p>
+    </div>
+
+    <!-- URLS -->
+    <div class="card">
+        <div class="section-title">URL Security Check</div>
+
+        {% for item in urls %}
+            <div class="item">
+                <a href="{{ item.url }}" target="_blank">{{ item.url }}</a>
+                → <span class="badge {{ item.risk }}">{{ item.risk }}</span>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+</body>
+</html>
