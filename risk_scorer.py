@@ -29,3 +29,24 @@ def calculate_risk(pii_data):
         "score": score,
         "level": level
     }
+
+def calculate_privacy_score(risk_score):
+
+    privacy_score = max(0, 100 - risk_score)
+
+    if privacy_score >= 80:
+        grade = "A"
+
+    elif privacy_score >= 60:
+        grade = "B"
+
+    elif privacy_score >= 40:
+        grade = "C"
+
+    else:
+        grade = "D"
+
+    return {
+        "privacy_score": privacy_score,
+        "grade": grade
+    }

@@ -105,6 +105,20 @@
         {% endfor %}
     </div>
 
+    <div class="card">
+    <h2>Privacy Assessment</h2>
+
+    <p>
+        Privacy Score:
+        <strong>{{ privacy.privacy_score }}/100</strong>
+    </p>
+
+    <p>
+        Resume Grade:
+        <strong>{{ privacy.grade }}</strong>
+    </p>
+</div>
+
     <!-- ENTITIES -->
     <div class="card">
         <div class="section-title">AI Entity Detection</div>
@@ -125,6 +139,16 @@
             </div>
         {% endfor %}
     </div>
+
+    <div class="card">
+    <h2>Security Recommendations</h2>
+
+    <ul>
+        {% for rec in recommendations %}
+            <li>{{ rec }}</li>
+        {% endfor %}
+    </ul>
+</div>
 
 </div>
 
