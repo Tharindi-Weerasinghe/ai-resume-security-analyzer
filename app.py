@@ -1,28 +1,29 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 import os
+
 from ai_entity_detector import extract_entities
 from url_security import analyze_urls
 from pdf_report import generate_pdf
 from recommendations import generate_recommendations
 from extractor import extract_text
 from pii_detector import detect_pii
-from risk_scorer import calculate_risk
-from risk_scorer import calculate_privacy_score
+from risk_scorer import calculate_risk, calculate_privacy_score
 
 app = Flask(__name__)
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+
 def generate_summary(risk):
     if risk["level"] == "CRITICAL":
-        return "Critical risk: Sensitive data exposure + potential security threats detected."
+        return "Critical risk: The resume contains unnecessary sensitive information or risky links that should be reviewed before sharing publicly."
     elif risk["level"] == "HIGH":
-        return "High risk: Resume contains sensitive personal information."
+        return "High risk: The resume contains sensitive information that is not usually required for initial job applications."
     elif risk["level"] == "MEDIUM":
-        return "Medium risk: Some personal data exposure detected."
+        return "Medium risk: Some privacy exposure was detected. Review the highlighted items before sharing."
     else:
-        return "Low risk: Resume is relatively safe."
+        return "Low risk: Only normal resume contact information or minimal privacy exposure was detected."
 
 
 @app.route("/")
@@ -32,7 +33,6 @@ def home():
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
-
     file = request.files["resume"]
 
     filepath = os.path.join(UPLOAD_FOLDER, file.filename)
@@ -40,32 +40,34 @@ def analyze():
 
     text = extract_text(filepath)
 
-    pii_results = detect_pii(text)
-    risk_result = calculate_risk(pii_results)
+    contact_info, privacy_risks = detect_pii(text)
+    urls = analyze_urls(text)
     entities = extract_entities(text)
 
-    urls = analyze_urls(text)
-    pdf_path = os.path.join(UPLOAD_FOLDER, "report.pdf")
-
-    generate_pdf(pdf_path, pii_results, risk_result, entities, urls)
-
-    summary = generate_summary(risk_result)
-    recommendations = generate_recommendations(pii_results)
+    risk_result = calculate_risk(privacy_risks, urls)
     privacy = calculate_privacy_score(risk_result["score"])
+    summary = generate_summary(risk_result)
+    recommendations = generate_recommendations(privacy_risks, urls)
 
-    
+    pdf_path = os.path.join(UPLOAD_FOLDER, "report.pdf")
+    generate_pdf(pdf_path, privacy_risks, risk_result, entities, urls)
+
     return render_template(
         "report.html",
-        pii=pii_results,
+        contact_info=contact_info,
+        privacy_risks=privacy_risks,
         risk=risk_result,
-        preview=text[:800],
+        privacy=privacy,
         entities=entities,
         urls=urls,
-        pdf_file = "report.pdf",
         summary=summary,
-        recommendations=recommendations,
-        privacy=privacy
+        recommendations=recommendations
     )
+
+
+@app.route("/uploads/<filename>")
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 
 if __name__ == "__main__":

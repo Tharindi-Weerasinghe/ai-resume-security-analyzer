@@ -2,153 +2,99 @@
 <html>
 <head>
     <title>Security Report</title>
-
-    <style>
-    body {
-        font-family: Arial;
-        background: #0b1220;
-        margin: 0;
-        padding: 20px;
-        color: white;
-    }
-
-    .container {
-        max-width: 900px;
-        margin: auto;
-    }
-
-    h1 {
-        text-align: center;
-        margin-bottom: 25px;
-    }
-
-    .card {
-        background: #111a2e;
-        padding: 20px;
-        margin-bottom: 15px;
-        border-radius: 12px;
-        box-shadow: 0 0 15px rgba(0,0,0,0.4);
-    }
-
-    .badge {
-        padding: 4px 10px;
-        border-radius: 20px;
-        font-weight: bold;
-        color: white;
-        font-size: 12px;
-    }
-
-    .LOW { background: #2ecc71; }
-    .MEDIUM { background: #f39c12; }
-    .HIGH { background: #e74c3c; }
-    .CRITICAL { background: #8e44ad; }
-
-    .item {
-        padding: 8px 0;
-        border-bottom: 1px solid #222;
-    }
-
-    a {
-        color: #4f7cff;
-        text-decoration: none;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-
-    .score {
-        font-size: 22px;
-        font-weight: bold;
-    }
-</style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
+<div class="navbar">
+    <div class="logo">🛡 Security Report</div>
+</div>
+
 <div class="container">
 
-    <h1>🛡 Resume Security Analysis Report</h1>
-
-    <!-- RISK -->
-    <div class="card">
-        <div class="section-title">Risk Overview</div>
-
-        <div class="score-box">
-            Score: <b>{{ risk.score }}</b>
-        </div>
-
-        <p>
-            Level:
-            <span class="badge {{ risk.level }}">
-                {{ risk.level }}
-            </span>
-        </p>
+    <div class="hero">
+        <h1>Resume Security Analysis Report</h1>
+        <p>Your resume was analyzed for privacy leaks, risky links, and sensitive exposure.</p>
     </div>
 
-    <!-- SUMMARY -->
+    <div class="grid">
+        <div class="stat">
+            <h2>{{ risk.score }}</h2>
+            <p>Risk Score</p>
+        </div>
+
+        <div class="stat">
+            <h2><span class="badge {{ risk.level }}">{{ risk.level }}</span></h2>
+            <p>Risk Level</p>
+        </div>
+
+        <div class="stat">
+            <h2>{{ privacy.privacy_score }}/100</h2>
+            <p>Privacy Score</p>
+        </div>
+
+        <div class="stat">
+            <h2>{{ privacy.grade }}</h2>
+            <p>Resume Grade</p>
+        </div>
+    </div>
+
     <div class="card">
-        <div class="section-title">AI Security Summary</div>
+        <h2>AI Security Summary</h2>
         <p>{{ summary }}</p>
     </div>
 
-    <!-- PII -->
-    <div class="card">
-        <div class="section-title">Sensitive Data Detected</div>
+<div class="card">
+    <h2>Professional Contact Information</h2>
 
-        {% for item in pii %}
+    {% if contact_info %}
+        {% for item in contact_info %}
             <div class="item">
-                <b>{{ item.type }}</b>
+                ✓ <b>{{ item.type }}</b>
+                → {{ item.matches }}
+                <span class="badge LOW">{{ item.status }}</span>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No standard contact information detected.</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>Privacy Risks Detected</h2>
+
+    {% if privacy_risks %}
+        {% for item in privacy_risks %}
+            <div class="item">
+                ⚠ <b>{{ item.type }}</b>
                 → {{ item.matches }}
                 <span class="badge {{ item.risk }}">{{ item.risk }}</span>
             </div>
         {% endfor %}
-    </div>
-
-    <div class="card">
-    <h2>Privacy Assessment</h2>
-
-    <p>
-        Privacy Score:
-        <strong>{{ privacy.privacy_score }}/100</strong>
-    </p>
-
-    <p>
-        Resume Grade:
-        <strong>{{ privacy.grade }}</strong>
-    </p>
+    {% else %}
+        <p>No unnecessary privacy risks detected.</p>
+    {% endif %}
 </div>
-
-    <!-- ENTITIES -->
     <div class="card">
-        <div class="section-title">AI Entity Detection</div>
+        <h2>Security Recommendations</h2>
 
-        <p><b>People:</b> {{ entities.PERSON }}</p>
-        <p><b>Organizations:</b> {{ entities.ORG }}</p>
-        <p><b>Locations:</b> {{ entities.GPE }}</p>
-    </div>
-
-    <!-- URLS -->
-    <div class="card">
-        <div class="section-title">URL Security Check</div>
-
-        {% for item in urls %}
-            <div class="item">
-                <a href="{{ item.url }}" target="_blank">{{ item.url }}</a>
-                → <span class="badge {{ item.risk }}">{{ item.risk }}</span>
-            </div>
-        {% endfor %}
+        {% if recommendations %}
+            <ul>
+                {% for rec in recommendations %}
+                    <li>{{ rec }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No major recommendations.</p>
+        {% endif %}
     </div>
 
     <div class="card">
-    <h2>Security Recommendations</h2>
-
-    <ul>
-        {% for rec in recommendations %}
-            <li>{{ rec }}</li>
-        {% endfor %}
-    </ul>
-</div>
+        <h2>Download Report</h2>
+        <a class="btn" href="/uploads/report.pdf" download>Download PDF Report</a>
+        <a class="btn" href="/">Analyze Another Resume</a>
+    </div>
 
 </div>
 

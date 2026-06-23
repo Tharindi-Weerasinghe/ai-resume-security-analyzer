@@ -2,91 +2,57 @@
 <html>
 <head>
     <title>AI Resume Security Analyzer</title>
-
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0b1220;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .container {
-            background: #111a2e;
-            padding: 40px;
-            border-radius: 15px;
-            width: 420px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.6);
-            text-align: center;
-        }
-
-        h1 {
-            margin-bottom: 10px;
-            font-size: 22px;
-        }
-
-        p {
-            font-size: 13px;
-            color: #aaa;
-            margin-bottom: 25px;
-        }
-
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            background: #1c2742;
-            border: 1px solid #2c3a5e;
-            border-radius: 8px;
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #4f7cff;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #3a66ff;
-        }
-
-        .footer {
-            margin-top: 15px;
-            font-size: 11px;
-            color: #777;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
+<div class="navbar">
+    <div class="logo">🛡 AI Resume Security Analyzer</div>
+</div>
+
 <div class="container">
 
-    <h1>🛡 AI Resume Security Analyzer</h1>
+    <div class="hero">
+        <h1>Analyze Your Resume Before Sharing It</h1>
+        <p>Detect sensitive data exposure, phishing links, privacy risks, and generate a security report.</p>
+    </div>
 
-    <p>Upload your resume to detect privacy leaks, phishing risks & sensitive data exposure</p>
+    <div class="upload-card">
+        <form action="/analyze" method="POST" enctype="multipart/form-data">
+            <div class="upload-box">
+                <h2>Upload Resume</h2>
+                <p>Supported file: PDF</p>
 
-    <form action="/analyze" method="POST" enctype="multipart/form-data">
+                <input type="file" name="resume" required>
 
-        <input type="file" name="resume" required>
+                <br>
 
-        <button type="submit">Analyze Security</button>
+                <button type="submit">Analyze Resume Security</button>
+            </div>
+        </form>
+    </div>
 
-    </form>
+    <div class="grid">
+        <div class="stat">
+            <h2>PII</h2>
+            <p>Detect email, phone, ID leaks</p>
+        </div>
 
-    <div class="footer">
-        Cybersecurity AI Project • Flask • NLP • Security Analysis
+        <div class="stat">
+            <h2>NLP</h2>
+            <p>AI entity recognition</p>
+        </div>
+
+        <div class="stat">
+            <h2>URL</h2>
+            <p>Suspicious link checks</p>
+        </div>
+
+        <div class="stat">
+            <h2>PDF</h2>
+            <p>Downloadable report</p>
+        </div>
     </div>
 
 </div>

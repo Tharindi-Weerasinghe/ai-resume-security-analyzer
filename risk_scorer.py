@@ -1,24 +1,23 @@
-def calculate_risk(pii_data):
-
+def calculate_risk(privacy_risks, urls):
     score = 0
 
-    for item in pii_data:
-
-        if item["type"] == "Email":
+    for item in privacy_risks:
+        if item["risk"] == "HIGH":
+            score += 40
+        elif item["risk"] == "MEDIUM":
+            score += 20
+        else:
             score += 10
 
-        elif item["type"] == "Phone":
-            score += 20
+    for url in urls:
+        if url["risk"] == "HIGH":
+            score += 30
+        elif url["risk"] == "MEDIUM":
+            score += 15
 
-        elif item["type"] in ["GitHub", "LinkedIn"]:
-            score += 5
-
-        elif item["type"] == "ID/Passport":
-            score += 40
-
-    if score >= 60:
+    if score >= 70:
         level = "CRITICAL"
-    elif score >= 40:
+    elif score >= 45:
         level = "HIGH"
     elif score >= 20:
         level = "MEDIUM"
@@ -30,19 +29,16 @@ def calculate_risk(pii_data):
         "level": level
     }
 
-def calculate_privacy_score(risk_score):
 
+def calculate_privacy_score(risk_score):
     privacy_score = max(0, 100 - risk_score)
 
     if privacy_score >= 80:
         grade = "A"
-
     elif privacy_score >= 60:
         grade = "B"
-
     elif privacy_score >= 40:
         grade = "C"
-
     else:
         grade = "D"
 
