@@ -169,6 +169,16 @@ http://127.0.0.1:5000
 
 ---
 
+## 📷 Screenshots
+
+### Home Page
+
+![Home Page](assets/home.png)
+
+### Analysis Report
+
+![Analysis Report](assets/report.png)
+
 ## Cybersecurity Concepts Demonstrated
 
 * Privacy Risk Assessment
